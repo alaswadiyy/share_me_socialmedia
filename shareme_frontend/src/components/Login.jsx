@@ -8,7 +8,16 @@ import GoogleLogin from 'react-google-login';
 const Login = () => {
 
   const responseGoogle= (response) => {
+    localStorage.setItem('user', JSON.stringify(response.profileObj))
 
+    const { name, googleId, imageUrl } = response.profileObj;
+
+    const doc = {
+      _id: googleId,
+      _type: 'user',
+      userName: name,
+      image: imageUrl,
+    }
   }
   return (
     <div className='flex justify-start items-center flex-col h-screen'>Login
@@ -27,7 +36,7 @@ const Login = () => {
           </div>
           <div className="shadow-2xl">
             <GoogleLogin
-              clientId='624702655163-tss75arpd77i31bsr4uaptjgat2ut8dl.apps.googleusercontent.com'
+              clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
               render={(renderProps) => (
                 <button
                   type='button'
