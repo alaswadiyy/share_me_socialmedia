@@ -14,6 +14,7 @@ const Home = () => {
 
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [user, setUser] = useState(null);
+  const scrollRef =useRef(null);
 
   const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
@@ -25,6 +26,11 @@ const Home = () => {
         setUser(data[0]);
       })
   }, []);
+
+  useEffect(() => {
+    scrollRef.current.scrollTo(0, 0)
+  }, [])
+  
   return (
     <div className='flex bg-gray-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out'>
       <div className="hidden md:flex h-screen flex-initial">
@@ -47,6 +53,12 @@ const Home = () => {
           <Sidebar user = {user && user} closeToggle={setToggleSidebar}/>
         </div>
       )}
+      <div className="pb-2 flex-1 h-screen overflow-y-screen" ref={scrollRef}>
+        <Routes>
+          <Route path='/user-profile/:userId' element={<UserProfile/>}/>
+          <Route path='/*' element={<Pins user={user && user}/>}/>
+        </Routes>
+      </div>
     </div>
   )
 }
