@@ -5,7 +5,7 @@ import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logo.png";
 import GoogleLogin from 'react-google-login';
 
-import client from "../client";
+import { client } from "../client";
 
 const Login = () => {
 
