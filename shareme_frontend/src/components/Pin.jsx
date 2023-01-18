@@ -7,12 +7,39 @@ import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
 
 
 import { client, urlFor } from '../client'
+import { fetchUser } from '../utils/fetchUser';
 
-const Pin = ({ pin: { postedBy, image, _id, destination }}) => {
+const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
 
     const [postHovered, setPostHovered] = useState(false);
     const [savingPost, setSavingPost] = useState(false);
     const navigate = useNavigate();
+    const user = fetchUser();
+    const alreadySaved = save?.filter((item) => item.postedBy._id === user.googleId);
+
+    const savePin = (id) => {
+        if (alreadySaved?.length === 0) {
+          setSavingPost(true);
+    
+          client
+            .patch(id)
+            .setIfMissing({ save: [] })
+            .insert('after', 'save[-1]', [{
+              _key: uuidv4(),
+              userId: user?.googleId,
+              postedBy: {
+                _type: 'postedBy',
+                _ref: user?.googleId,
+              },
+            }])
+            .commit()
+            .then(() => {
+              window.location.reload();
+              setSavingPost(false);
+            });
+        }
+    };
+    
   return (
     <div className='m-2'>
         <div
@@ -39,6 +66,22 @@ const Pin = ({ pin: { postedBy, image, _id, destination }}) => {
                             <MdDownloadForOffline />
                         </a>
                     </div>
+                    {alreadySaved?.length !== 0 ? (
+                        <button>
+                            Saved
+                        </button>
+                    ): (
+                        <button
+                            onClick={(e) => {
+                            e.stopPropagation();
+                            savePin(_id);
+                            }}
+                            type="button"
+                            className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                        >
+                            Save
+                        </button>
+                    )}
                 </div>
 
             </div>
