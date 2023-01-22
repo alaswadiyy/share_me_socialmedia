@@ -67,7 +67,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
                         </a>
                     </div>
                     {alreadySaved ? (
-                        <button>
+                        <button type='button' className='bg-red-500'>
                             Saved
                         </button>
                     ): (
