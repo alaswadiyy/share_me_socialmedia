@@ -91,6 +91,11 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
                                 {destination.length > 20 ? destination.slice(8, 20) : destination.slice(8)}
                             </a>
                         )}
+                        {postedBy?._id === user.googleId && (
+                            <buttom>
+                                
+                            </buttom>
+                        )}
                     </div>
             </div>
         )}
