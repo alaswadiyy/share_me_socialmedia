@@ -32,9 +32,17 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
             .commit()
             .then(() => {
               window.location.reload();
-            });
+            });(
         }
     };
+
+    const deletePin = (id) => {
+        client
+            .delete(id)
+            .then(() => {
+                window.location.reload();
+            })
+    }
     
   return (
     <div className='m-2'>
@@ -92,14 +100,29 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
                             </a>
                         )}
                         {postedBy?._id === user.googleId && (
-                            <buttom>
-                                
+                            <buttom
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    deletePin(_id);
+                                }}
+                                className="bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
+                            >
+                                <AiTwotoneDelete />
                             </buttom>
                         )}
                     </div>
             </div>
         )}
         </div>
+        <link to={`user-profile/${user?._id}`} className="flex gap-2 mt-2 items-center">
+            <img
+                className='w-8 h-8 rounded-full object-cover'
+                src={postedBy?.image}
+                alt="user-profile"
+            />
+            <p className='font-semibold capitalize'>{postedBy?.userName}</p>
+        </link>
     </div>
   )
 }
