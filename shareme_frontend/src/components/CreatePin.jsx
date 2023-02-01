@@ -19,6 +19,20 @@ const CreatePin = () => {
 
   const navigate = useNavigate();
 
+  const uploadImage = (e) => {
+    const {type} = e.target.files[0];
+
+    if (type === 'image/png' || type === 'image/svg' || type === 'image/jpeg' || type === 'image/gif' || type === 'image/tiff') {
+      setWrongImageType(false);
+      setLoading(true);
+
+      client.assets
+        .upload('image', selectedFile)
+    } else {
+      setWrongImageType(true);
+    }
+  }
+
 
   return (
     <div className='flex flex-col justify-center items-center mt-5 lg:h-4/5'>
@@ -37,8 +51,18 @@ const CreatePin = () => {
                     <p className='font-bold text-2xl'>
                       <AiOutlineCloudUpload />
                     </p>
+                    <p className='text-lg'>Click to upload</p>
                   </div>
+                  <p className='mt-32 text-gray-400'>
+                    Use high quality JPG, SVG, PNG, GIF less than 20 Mb
+                  </p>
                 </div>
+                <input
+                  type="file"
+                  name='upload-image'
+                  onChange={uploadImage}
+                  className="w-0 h-0"
+                />
               </label>
             ) : (
               <p>something false</p>
