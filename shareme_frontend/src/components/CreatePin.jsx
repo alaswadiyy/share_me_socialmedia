@@ -27,7 +27,7 @@ const CreatePin = () => {
       setLoading(true);
 
       client.assets
-        .upload('image', selectedFile)
+        .upload('image', e.target.files[0], {contentType: type, filename: name})
     } else {
       setWrongImageType(true);
     }
