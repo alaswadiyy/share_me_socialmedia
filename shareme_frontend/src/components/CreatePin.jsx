@@ -28,6 +28,13 @@ const CreatePin = () => {
 
       client.assets
         .upload('image', e.target.files[0], {contentType: type, filename: name})
+        .then((document) => {
+          setImageAssets(document)
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.log("image upload error", error)
+        })
     } else {
       setWrongImageType(true);
     }
@@ -65,7 +72,16 @@ const CreatePin = () => {
                 />
               </label>
             ) : (
-              <p>something false</p>
+              <div className='relative h-full'>
+                <img src={imageAssets?.url} alt="uploaded-pic" className='h-full w-full' />
+                <button
+                  type='button'
+                  className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out'
+                  onClick={(() => setImageAssets(null))}
+                >
+                  <MdDelete />
+                </button>
+              </div>
             )}
           </div>
         </div>
