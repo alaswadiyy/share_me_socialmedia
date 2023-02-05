@@ -85,6 +85,9 @@ const CreatePin = () => {
             )}
           </div>
         </div>
+        <div className=''>
+
+        </div>
       </div>
     </div>
   )
