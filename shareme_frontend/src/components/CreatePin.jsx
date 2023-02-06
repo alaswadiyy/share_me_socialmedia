@@ -85,7 +85,7 @@ const CreatePin = () => {
             )}
           </div>
         </div>
-        <div className=''>
+        <div className='flex flex-1 flex-col'>
 
         </div>
       </div>
