@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "react-loader-spinner": "^5.3.4"
+    "@mui/lab": "^5.0.0-alpha.119",
+    "@mui/material": "^5.11.8",
+    "@mui/styled-engine-sc": "^5.11.0",
+    "react-loader-spinner": "^5.3.4",
+    "styled-components": "^5.3.6"
   }
 }

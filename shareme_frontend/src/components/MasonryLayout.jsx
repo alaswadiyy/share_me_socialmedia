@@ -1,5 +1,5 @@
 import React from 'react'
-import Masonry from 'react-masonry-css';
+import Masonry from '@mui/lab/Masonry';
 import Pin from './Pin';
 
 const breakpointObj = {
@@ -18,4 +18,4 @@ const MasonryLayout = ({pins}) => (
 );
 
 
-export default MasonryLayout
+export default MasonryLayout;

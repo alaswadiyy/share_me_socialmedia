@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { Link, useParams } from "react-router-dom";
-import { u4, uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 import { client, urlFor } from "../client"
 import MasonryLayout from './MasonryLayout';
 import { pinDetailMorePinQuery, pinDetailQuery } from '../utils/data';
 import Spinner from './Spinner';
-import { isHtmlElement } from 'react-router-dom/dist/dom';
+
 
 const PinDetail = ({ user }) => {
   const [pins, setPins] = useState(null);
@@ -27,7 +27,7 @@ const PinDetail = ({ user }) => {
             comment,
             _key: uuidv4(),
             postedBy: {
-              _type: 'postedBy'
+              _type: 'postedBy',
               _ref: user._id
             }
           }])
@@ -44,7 +44,7 @@ const PinDetail = ({ user }) => {
       let query = pinDetailQuery(pinId);
 
       if(query) {
-        client.fetch(query)
+        client.fetch(`${query}`)
           .then((data) => {
             setPinDetail(data[0])
 
@@ -52,15 +52,15 @@ const PinDetail = ({ user }) => {
               query = pinDetailMorePinQuery(data[0]);
 
               client.fetch(query)
-                .then((res) => setPins(res));
+                .then((res) => {setPins(res)});
             }
           })
       }
     }
 
     useEffect(() => {
-      fetchPinDetails()
-    }, [pinId])
+      fetchPinDetails();
+    }, [pinId]);
     
   if(!pinDetail) return <Spinner message="Loading pin...." />
 
@@ -88,7 +88,7 @@ const PinDetail = ({ user }) => {
               </a>
             </div>
             <a href={pinDetail.destination} target="_blank" rel='noreferrer'>
-              {pinDetail.destination}
+              {pinDetail.destination?.slice(8)}
             </a>
           </div>
           <div>
@@ -97,44 +97,44 @@ const PinDetail = ({ user }) => {
             </h1>
             <p className='mt-3'>{pinDetail.about}</p>
           </div>
-          <link to={`user-profile/${pinDetail.postedBy?._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg">
+          <Link to={`user-profile/${pinDetail.postedBy?._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg">
               <img
                   className='w-8 h-8 rounded-full object-cover'
                   src={pinDetail.postedBy?.image}
                   alt="user-profile"
               />
               <p className='font-semibold capitalize'>{pinDetail.postedBy?.userName}</p>
-          </link>
+          </Link>
           <h2 className='mt-5 text-2xl'>Comments</h2>
           <div className="max-h-370 overflow-y-auto">
-            {pinDetail?.comments?.map((comment) => {
-              <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={i}>
+            {pinDetail?.comments?.map((item) => (
+              <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={item.comment}>
                 <img
-                src={comment.postedBy.image} 
+                src={item.postedBy.image} 
                 alt="user-profile"
                 className='h-10 w-10 rounded-full cursor-pointer' 
                 />
                 <div className="flex flex-col">
-                  <p className="font-bold">{comment.postedBy.userName}</p>
-                  <p>{comment.comment}</p>
+                  <p className="font-bold">{item.postedBy.userName}</p>
+                  <p>{item.comment}</p>
                 </div>
               </div>
-            })}
+            ))}
           </div>
           <div className="flex flex-wrap mt-6 gap-3">
-            <link to={`user-profile/${pinDetail.postedBy?._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg">
+            <Link to={`user-profile/${pinDetail.postedBy?._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg">
               <img
                 className='w-8 h-8 rounded-full cursor-pointer'
                 src={pinDetail.postedBy?.image}
                 alt="user-profile"
               />
-            </link>
+            </Link>
             <input
-            type="text"
-            className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
-            placeholder='Add a comment'
-            value={comment}
-            onChange={(e) => setComment(e.target.value)} 
+              type="text"
+              className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
+              placeholder='Add a comment'
+              value={comment}
+              onChange={(e) => setComment(e.target.value)} 
             />
             <button
               type='button'
